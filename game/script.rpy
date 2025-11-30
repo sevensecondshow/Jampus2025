@@ -1,12 +1,12 @@
-﻿# The script of the game goes in this file.
 
 define mc = Character('Tin', color="#c8ffc8", image="mc")
 define n = Character('???', color="#c8ffc8")
 
 image screen0 = "introscreen_ph.png"
 image screen1 = "boat_placeholder.png"
-# image character1 = "character1_ph.png"
-# image character1_sad = "character1sad_ph.png"
+image ship_screen_center = "shipscreen_center.png"
+image ship_screen_left = "shipscreen_left.png"
+image ship_screen_right = "shipscreen_right.png"
 
 
 label start:
@@ -45,7 +45,6 @@ label negative01:
     scene screen1
     with fade
 
-    #show character1_sad at left
     mc sad "come on, at least let me be a little edgy if we’re at the end of the world."
     jump intro_02
 
@@ -60,8 +59,6 @@ label positive01:
     jump intro_02
 
 label intro_02:
-    #show character1 at left
-    #with dissolve
 
     mc neutral "i hear it’s starting to get pretty close to the draw."
     mc "union wants to nix santa and nixon wants to spy on the union."
@@ -104,5 +101,77 @@ label intro_03:
         
 label intro_04:
     mc neutral "our shift is starting soon,"
+
+
+label day_01_center:
+
+    call screen shipscreen_nav_center
+
+    scene ship_screen_center with dissolve
+
+    screen shipscreen_nav_center():
+        add "shipscreen_center"
+        modal True
+
+        imagebutton auto "move_screen_left_%s":
+            focus_mask True
+            hovered SetVariable("screen_tooltip", "move screen left")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_left")
+
+        imagebutton auto "move_screen_right_%s":
+            focus_mask True
+            hovered SetVariable("screen_tooltip", "move screen right")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_right")
+
+
+        imagebutton auto "ciara_cd_%s":
+            focus_mask True
+            hovered SetVariable("screen_tooltip", "Iconic CD")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("click_on_cd")
+
+label day_01_left:
+    call screen shipscreen_nav_left
+    scene ship_screen_left with dissolve
+
+    screen shipscreen_nav_left():
+        add "shipscreen_left"
+        modal True
+
+        imagebutton auto "move_screen_right_%s":
+            focus_mask True
+            hovered SetVariable("screen_tooltip", "move screen right")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_center")
+
+label day_01_right:
+    call screen shipscreen_nav_right
+    scene ship_screen_right with dissolve
+
+    screen shipscreen_nav_right():
+        add "shipscreen_right"
+        modal True
+
+        imagebutton auto "move_screen_left_%s":
+            focus_mask True
+            hovered SetVariable("screen_tooltip", "move screen right")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_center")
+
+
+
+label click_on_cd:
+    scene shipscreen_ciara_cd
+    pause 2.0
+    "I see you are interested in relics of the past."
+
+    jump day_01_center
+
+
+
+
+
 
     return
