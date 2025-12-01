@@ -132,6 +132,12 @@ label day_01_center:
             unhovered SetVariable("screen_tooltip", "")
             action Jump("click_on_cd")
 
+        imagebutton auto "radio_%s":
+            focus_mask True
+            hovered SetVariable("screen_tooltip", "choose what is on the radio")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("click_on_radio")
+
 label day_01_left:
     call screen shipscreen_nav_left
     scene ship_screen_left with dissolve
@@ -169,9 +175,62 @@ label click_on_cd:
 
     jump day_01_center
 
-
-
-
-
-
+label click_on_radio:
+    scene shipscreen_radio
+    "Choose the tunes"
+    call screen radio_choose
     return
+
+    
+
+screen radio_choose:
+    hbox:
+        xalign 0.5
+        yalign 0.5
+        spacing 10
+        frame: 
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            textbutton "101.9" action Jump("radio_1019")
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            text "103.5"
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            text "104.9"
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            textbutton "turn off" action Jump("turn_off_radio")
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            textbutton "return" action Jump("call_hide_screens_ui")
+            
+
+label radio_1019:
+    play music "audio/background.mp3" fadeout 2.0 fadein 2.0
+    "playing 101.9 - your favorite elf's favorite radio station"
+    jump call_hide_screens_ui
+
+label turn_off_radio:
+    stop music fadeout 2.0
+    "i'm too stressed for music"
+    jump call_hide_screens_ui
+    
+
+label call_hide_screens_ui:
+    hide radio_choose
+    jump day_01_center
