@@ -1,6 +1,10 @@
 
 define mc = Character('Tin', color="#c8ffc8", image="mc")
 define n = Character('???', color="#c8ffc8")
+define kw = Character('Kwiyer', color="#F1F794")
+define nx = Character('Nixon', color="#544B13")
+define fd = Character('FD Pantz', color="#EB8FE6")
+define h = Character('Herscheles', color="#6E90FF")
 
 image screen0 = "introscreen_ph.png"
 image screen1 = "boat_placeholder.png"
@@ -8,6 +12,12 @@ image ship_screen_center = "shipscreen_center.png"
 image ship_screen_left = "shipscreen_left.png"
 image ship_screen_right = "shipscreen_right.png"
 
+default Day_01_FD_Conversation = False
+default Day_01_Kwiyer_Conversation = False
+default Day_01_Nixon_Conversation = False
+default Quest_FD = False
+default Quest_NX = False
+default Quest_KW = False
 
 label start:
     $ trust_points = 5
@@ -102,6 +112,282 @@ label intro_03:
 label intro_04:
     mc neutral "our shift is starting soon,"
 
+## SHIFT START: GALLEY 
+
+label shift_start_galley:
+    mc neutral "mic check, one two, one two, you read me?"
+
+menu:
+    "yes.":
+        jump shift_start_galley_02
+
+label shift_start_galley_02:
+    mc "perfect. what's in store for us?"
+    mc "the only thing we really have to do is handle the shipment from the Entire Nation of Switzerland and I'd like to talk to at least 2 people about jeffany's disappearance."
+    # tutorial dialogue
+    mc "{i}When you want to send me somewhere else, cycle through your cameras and press 'enter' to direct me. {/i}"
+    mc "{i} click on items or people if you want me to investigate, i'll be listening for your input.{/i}"
+
+menu:
+    "bridge":
+        jump day_01_bridge
+    "engine room":
+        jump day_01_engineroom
+    "factory cam 1":
+        jump day_01_factorycam01
+    "deck 3, hallway 4":
+        jump day_01_deckthree
+    "deck 2, stern":
+        jump day_01_stern
+    "galley":
+        jump day_01_galley
+
+
+label day_01_bridge:
+    mc "that's off limits right now. let's try somewhere else?"
+    jump day_01_center
+
+
+label day_01_engineroom:
+    mc "i don't have the keys, maybe some other time."
+    jump day_01_center
+
+
+label day_01_factorycam01:
+    $ Day_01_Kwiyer_Conversation = False
+    mc "if we must.."
+    mc "the factory smells unpleasant as always. i'm not sure how much longer i can stand to inhale plastic fumes like this."
+    kw "Hiya, Tin! Merry day, I think. What are you up to?"
+
+menu:
+    "Can you remind us when you last saw Jeffany?":
+        jump day_01_center
+        # still needs filling out
+    "We might want to get involved with the Union.":
+        jump day_01_factorycam01_kwiyer01
+
+label day_01_factorycam01_kwiyer01:
+    kw "Oh!!"
+    kw "Of course! Yes! Thank you!"
+    kw "We have nightly meetings in the galley, most nights we're just chatting but every so often we've got some business to discuss."
+    kw "Honestly, I'm surprised they're still honoring the contract.."
+    kw "Um, to an extent."
+    kw "The only thing is… We're so few now, and some people are on the fence. Would you be able to talk to them about coming to a meeting?"
+
+menu:
+    "We can do that.":
+        jump positive_factorycam01
+    "On second thought, that sounds a bit out of our depth.":
+        jump negative_factorycam01
+
+label positive_factorycam01:
+    kw "Perfect, thank you so much! If you ever see the following people, could you bring it up? "
+    # Gain Trust
+    # Get Item: Employee List
+    $ Day_01_Kwiyer_Conversation = True
+    $ Quest_KW = True
+    jump day_01_center
+
+label negative_factorycam01:
+    kw "Oh! Sure, yeah, no worries. Thanks for the interest! I hope we see you at the meeting.."
+    # Lose Trust
+    $ Day_01_Kwiyer_Conversation = True
+    jump day_01_center
+
+
+
+label day_01_deckthree:
+    $ Day_01_Nixon_Conversation = False
+    mc "I forgot how loud the lights are here."
+    nx "Oh, Tin, perfect! Just who I wanted to see. Have you given any thought to the offer?"
+
+menu:
+    "Can you remind us what that was?":
+        jump day_01_deckthree_nixon_01
+    "Let's talk about it.":
+        jump day_01_deckthree_nixon_02
+
+label day_01_deckthree_nixon_01:
+    nx "Well, sure!"
+    # fill out continuation of explanation here
+
+label day_01_deckthree_nixon_02:
+    nx "Perfect, what will it be?"
+
+menu:
+    "We'll wear the bug.":
+        jump day_01_deckthree_nixon_03
+    "We wont do it.":
+        jump day_01_deckthree_nixon_04
+
+label day_01_deckthree_nixon_03:
+    nx "Excellent. Sit as close as possible to the staff rep."
+    # lose SIGNIFICANT trust with Tin
+    # Get Item: Bug
+    $ Day_01_Nixon_Conversation = True
+    $ Quest_NX = True
+    jump day_01_center
+
+label day_01_deckthree_nixon_04:
+    nx "If you change your mind.. You know how to find me."
+    #raise trust
+    $ Day_01_Nixon_Conversation = True
+    jump day_01_center
+
+
+label day_01_stern:
+    $ Day_01_FD_Conversation = False
+    mc "it's as good a day as any, i guess. at least the ocean breeze is nice, we still have that."
+    mc "it looks like FD Pantz is here if we want to talk to him"
+    fd "Tin Foyle you wonderful elf, you! How are you and your partner-in-security doing?"
+    fd "Do you see the beautiful nation of Switzerland still hard at work while everything's gone under? How admirable!"
+    fd "Not very chatty if you ask me, but I'm here to take care of obligations!"
+    fd "Unlike SOME people on the bridge,"
+    fd "but I digress!"
+
+menu:
+    "Did you handle the shipment?":
+        jump day_01_stern_fd_01
+    "What are you doing out here?":
+        jump day_01_stern_fd_02
+
+label day_01_stern_fd_01:
+    fd "Yes, in fact I did! Taking initiative as always, of course, for the good of the ship since darling, dear, big boss Claus is ever so busy designing toys for the factory."
+    fd "Oh, with that much free time I don't know what I'd do!"
+    $ Day_01_FD_Conversation = True
+    jump day_01_center
+
+label day_01_stern_fd_02:
+    fd "Oh, you know, just enjoying the sweet, salt air and schem-" 
+    fd "planning, of course, planning and thinking and organizing, et cetra!"
+    fd "You know, if I was in charge I think we could really turn this boat around! In fact, would you be willing to sign and share this petition?"
+
+menu:
+    "Sign, but decline to share.":
+        jump day_01_stern_fd_03
+    "Yeah, anything's better than this, why not? Sign and share.":
+        jump day_01_stern_fd_04
+    "Decline entirely.":
+        jump day_01_stern_fd_05
+
+label day_01_stern_fd_03:
+    # FILL OUT
+    fd "oh"
+    $ Day_01_FD_Conversation = True
+    jump day_01_center
+
+label day_01_stern_fd_04:
+    fd "I knew I could count on you two! Talk to me next week, about it, yeah? We've got big stuff coming!"
+    $ Day_01_FD_Conversation = True
+    $ Quest_FD = True
+    jump day_01_center
+
+label day_01_stern_fd_05:
+    # FILL OUT
+    fd "oh"
+    $ Day_01_FD_Conversation = True
+    jump day_01_center
+
+
+
+
+label day_01_galley:
+    if Day_01_FD_Conversation == True:
+        mc "yum! let's go"       
+    elif Day_01_Kwiyer_Conversation == True:
+        mc "yum! let's go"
+    elif Day_01_Nixon_Conversation == True:
+        mc "yum! let's go"
+    else:
+    # if no
+        mc "i wanna check in with a leader first."
+
+    mc "Oh! Herscheles is here. They were pretty close to Jeffany.. I don't think we should bring it up.."
+    mc "But... I'll trust you to make the right choice."
+    h "...."
+    h "Oh, Foyle.. and friend, I assume. What's up?"
+
+    if Quest_FD == True:
+        menu:
+            "Talk about the Union.":
+                jump day_01_galley_herc_01
+            # if FD quest ->
+            "What do you think about management?":
+                jump day_01_galley_herc_02
+            "Bring up Jeffany.":
+                jump day_01_galley_herc_03
+    else:
+        menu:
+            "Talk about the Union.":
+                jump day_01_galley_herc_01
+            "Bring up Jeffany.":
+                jump day_01_galley_herc_03       
+
+
+label day_01_galley_herc_01:
+    h "Ah, yeah, them… I dunno, what's the point in having a union anymore when we live in an apocalypse?"
+
+    if Quest_KW == True and Quest_NX == True:
+        menu:
+            "(neutral) You're right. Disregard.": # LOSE TRUST WITH TIN
+            # trust roll check
+                jump day_01_galley_herc_04
+            # if union quest ->
+            "There's a meeting tonight and they want people's input.": #(no change to trust)
+                jump day_01_center
+            # if nixon quest ->
+            "You're right, you might want to talk to Nixon.":
+            # trust roll check
+                jump day_01_center
+    elif Quest_KW == True and Quest_NX == False: # if only Quest_KW is true
+        menu:
+            "(neutral) You're right. Disregard.": # LOSE TRUST WITH TIN
+            # trust roll check
+                jump day_01_galley_herc_04
+            # if union quest ->
+            "There's a meeting tonight and they want people's input.": #(no change to trust)
+                jump day_01_center
+    elif Quest_KW == False and Quest_NX == True:
+        menu:
+            "(neutral) You're right. Disregard.": # LOSE TRUST WITH TIN
+            # trust roll check
+                jump day_01_galley_herc_04
+            # if nixon quest ->
+            "You're right, you might want to talk to Nixon.":
+            # trust roll check
+                jump day_01_center
+    else: # QuestKW and QuestNX are False
+        menu:
+            "(neutral) You're right. Disregard.": # LOSE TRUST WITH TIN
+            # trust roll check
+                jump day_01_galley_herc_04
+
+
+
+
+label day_01_galley_herc_02:
+    h "They're not my favorite in the world."
+    # FILL OUT CONTINUE
+    jump day_01_center
+
+label day_01_galley_herc_03:
+    # TRUST ROLL CHECK
+    jump day_01_center
+
+label day_01_galley_herc_04:
+    # if trust roll success
+    h "Uhuh... Anything else?"
+    # if trust roll fail
+    mc "Well, actually..!"
+    mc "Kwiyer seems like she really cares about getting people's opinions.."
+    h "You think so?"
+    mc "I have a good feeling about her. Even just as someone to talk to, it seems like she's really trying."
+    h "Huh.. Ok, sure." # +1 to union cause
+    jump day_01_center
+
+
+
+
 
 label day_01_center:
 
@@ -113,17 +399,53 @@ label day_01_center:
         add "shipscreen_center"
         modal True
 
-        imagebutton auto "move_screen_left_%s":
+        imagebutton auto "ship_map_bridge_%s":
             focus_mask True
-            hovered SetVariable("screen_tooltip", "move screen left")
+            hovered SetVariable("screen_tooltip", "move to ship bridge")
             unhovered SetVariable("screen_tooltip", "")
-            action Jump("day_01_left")
+            action Jump("day_01_bridge")
 
-        imagebutton auto "move_screen_right_%s":
+        imagebutton auto "ship_map_d2_%s":
             focus_mask True
-            hovered SetVariable("screen_tooltip", "move screen right")
+            hovered SetVariable("screen_tooltip", "move to deck 2")
             unhovered SetVariable("screen_tooltip", "")
-            action Jump("day_01_right")
+            action Jump("day_01_stern")
+
+        imagebutton auto "ship_map_d3_%s":
+            focus_mask True
+            hovered SetVariable("screen_tooltip", "move to ship bridge")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_deckthree")
+
+        imagebutton auto "ship_map_engine_%s":
+            focus_mask True
+            hovered SetVariable("screen_tooltip", "move to deck 3")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_engineroom")
+
+        imagebutton auto "ship_map_galley_%s":
+            focus_mask True
+            hovered SetVariable("screen_tooltip", "move to galley")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_galley")
+
+        imagebutton auto "ship_map_factory_%s":
+            focus_mask True
+            hovered SetVariable("screen_tooltip", "move to factory")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_factorycam01")
+
+        # imagebutton auto "move_screen_left_%s":
+        #     focus_mask True
+        #     hovered SetVariable("screen_tooltip", "move screen left")
+        #     unhovered SetVariable("screen_tooltip", "")
+        #     action Jump("day_01_left")
+
+        # imagebutton auto "move_screen_right_%s":
+        #     focus_mask True
+        #     hovered SetVariable("screen_tooltip", "move screen right")
+        #     unhovered SetVariable("screen_tooltip", "")
+        #     action Jump("day_01_right")
 
 
         imagebutton auto "ciara_cd_%s":
@@ -137,6 +459,10 @@ label day_01_center:
             hovered SetVariable("screen_tooltip", "choose what is on the radio")
             unhovered SetVariable("screen_tooltip", "")
             action Jump("click_on_radio")
+
+
+
+
 
 label day_01_left:
     call screen shipscreen_nav_left
