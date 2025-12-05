@@ -1,9 +1,9 @@
 
-define mc = Character('Tin', color="#c8ffc8", image="mc")
+define mc = Character('Tin', color="#c8ffc8", image="tin")
 define n = Character('???', color="#c8ffc8")
-define kw = Character('Kwiyer', color="#F1F794")
-define nx = Character('Nixon', color="#544B13")
-define fd = Character('FD Pantz', color="#EB8FE6")
+define kw = Character('Kwiyer', color="#F1F794", image="kw")
+define nx = Character('Nixon', color="#544B13", image ="nixon")
+define kd = Character('KD Pantz', color="#EB8FE6")
 define h = Character('Herscheles', color="#6E90FF")
 
 image screen0 = "introscreen_ph.png"
@@ -12,16 +12,43 @@ image ship_screen_center = "shipscreen_center.png"
 image ship_screen_left = "shipscreen_left.png"
 image ship_screen_right = "shipscreen_right.png"
 
-default Day_01_FD_Conversation = False
+default Day_01_kd_Conversation = False
 default Day_01_Kwiyer_Conversation = False
 default Day_01_Nixon_Conversation = False
-default Quest_FD = False
+default Quest_KD = False
 default Quest_NX = False
 default Quest_KW = False
 
 label start:
-    $ trust_points = 5
+    $ trust_points = 50
+    $ union_ending_points = 0
+    $ nixon_ending_points = 0
+    $ kd_ending_points = 0
+
     scene screen0
+
+    #call screen frame_text()
+    show screen frame_text
+
+    screen frame_text:
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            # add Solid ("#520303")
+            # xsize 600
+            # ysize 200
+            # xoffset 690
+            # yoffset 440
+            text "DAYS UNTIL DECISION: 14"
+            # hbox:
+            #     textbutton "DAYS UNTIL DECISION: 14" action Jump(intro01)
+            #     ypos 0.5
+            #     xpos 0.15
+
+    pause 5
+    hide screen frame_text
 
     #n "our home, the north pole, has melted all away over the course of a short, rapid hundred years."
     #n "our boss, santa, has held onto a dream of dry land for the whole of humanity."
@@ -88,7 +115,7 @@ label positive02:
 
 label negative02:
     $ trust_points -= 1
-    mc sad "oh- wow, i.. really? you’d take nixon’s deal?"
+    mc surprised "oh- wow, i.. really? you’d take nixon’s deal?"
     mc "maybe let's change the subject."
     jump intro_03
 
@@ -103,7 +130,7 @@ label intro_03:
 
     if trust_points <= 4:
 
-        mc sad "you’re the only person i can lean on."
+        mc angry "you’re the only person i can lean on."
         mc "no matter what happens, you’re my partner for whatever that means these days."
         mc "..."
         mc "5999 people left on earth, and you’re the only person i can trust."
@@ -155,9 +182,9 @@ label day_01_engineroom:
 
 label day_01_factorycam01:
     $ Day_01_Kwiyer_Conversation = False
-    mc "if we must.."
-    mc "the factory smells unpleasant as always. i'm not sure how much longer i can stand to inhale plastic fumes like this."
-    kw "Hiya, Tin! Merry day, I think. What are you up to?"
+    mc sad "if we must.."
+    mc angry "the factory smells unpleasant as always. i'm not sure how much longer i can stand to inhale plastic fumes like this."
+    kw smile "Hiya, Tin! Merry day, I think. What are you up to?"
 
 menu:
     "Can you remind us when you last saw Jeffany?":
@@ -167,12 +194,12 @@ menu:
         jump day_01_factorycam01_kwiyer01
 
 label day_01_factorycam01_kwiyer01:
-    kw "Oh!!"
+    kw smile "Oh!!"
     kw "Of course! Yes! Thank you!"
     kw "We have nightly meetings in the galley, most nights we're just chatting but every so often we've got some business to discuss."
-    kw "Honestly, I'm surprised they're still honoring the contract.."
+    kw neutral "Honestly, I'm surprised they're still honoring the contract.."
     kw "Um, to an extent."
-    kw "The only thing is… We're so few now, and some people are on the fence. Would you be able to talk to them about coming to a meeting?"
+    kw sad "The only thing is… We're so few now, and some people are on the fence. Would you be able to talk to them about coming to a meeting?"
 
 menu:
     "We can do that.":
@@ -182,7 +209,7 @@ menu:
 
 label positive_factorycam01:
     kw "Perfect, thank you so much! If you ever see the following people, could you bring it up? "
-    # Gain Trust
+    $ trust_points += 1
     # Get Item: Employee List
     $ Day_01_Kwiyer_Conversation = True
     $ Quest_KW = True
@@ -190,7 +217,7 @@ label positive_factorycam01:
 
 label negative_factorycam01:
     kw "Oh! Sure, yeah, no worries. Thanks for the interest! I hope we see you at the meeting.."
-    # Lose Trust
+    $ trust_points -= 1
     $ Day_01_Kwiyer_Conversation = True
     jump day_01_center
 
@@ -198,7 +225,7 @@ label negative_factorycam01:
 
 label day_01_deckthree:
     $ Day_01_Nixon_Conversation = False
-    mc "I forgot how loud the lights are here."
+    mc angry "I forgot how loud the lights are here."
     nx "Oh, Tin, perfect! Just who I wanted to see. Have you given any thought to the offer?"
 
 menu:
@@ -209,10 +236,12 @@ menu:
 
 label day_01_deckthree_nixon_01:
     nx "Well, sure!"
-    # fill out continuation of explanation here
+    nx "We're worried that The Union is skewing people's perspectives on things. We run the jolliest ship in the whole world!"
+    nx "The world's Last Hope for Christmas cheer!"
+    nx "And The UNION wants to take it away from everyone. We can't have that, can we?"
 
 label day_01_deckthree_nixon_02:
-    nx "Perfect, what will it be?"
+    nx "So, what will it be?"
 
 menu:
     "We'll wear the bug.":
@@ -222,7 +251,7 @@ menu:
 
 label day_01_deckthree_nixon_03:
     nx "Excellent. Sit as close as possible to the staff rep."
-    # lose SIGNIFICANT trust with Tin
+    $ trust_points -= 10
     # Get Item: Bug
     $ Day_01_Nixon_Conversation = True
     $ Quest_NX = True
@@ -230,69 +259,69 @@ label day_01_deckthree_nixon_03:
 
 label day_01_deckthree_nixon_04:
     nx "If you change your mind.. You know how to find me."
-    #raise trust
+    $ trust_points += 1
     $ Day_01_Nixon_Conversation = True
     jump day_01_center
 
 
 label day_01_stern:
-    $ Day_01_FD_Conversation = False
+    $ Day_01_kd_Conversation = False
     mc "it's as good a day as any, i guess. at least the ocean breeze is nice, we still have that."
-    mc "it looks like FD Pantz is here if we want to talk to him"
-    fd "Tin Foyle you wonderful elf, you! How are you and your partner-in-security doing?"
-    fd "Do you see the beautiful nation of Switzerland still hard at work while everything's gone under? How admirable!"
-    fd "Not very chatty if you ask me, but I'm here to take care of obligations!"
-    fd "Unlike SOME people on the bridge,"
-    fd "but I digress!"
+    mc "it looks like KD Pantz is here if we want to talk to him"
+    kd "Tin Foyle you wonderful elf, you! How are you and your partner-in-security doing?"
+    kd "Do you see the beautiful nation of Switzerland still hard at work while everything's gone under? How admirable!"
+    kd "Not very chatty if you ask me, but I'm here to take care of obligations!"
+    kd "Unlike SOME people on the bridge,"
+    kd "but I digress!"
 
 menu:
     "Did you handle the shipment?":
-        jump day_01_stern_fd_01
+        jump day_01_stern_kd_01
     "What are you doing out here?":
-        jump day_01_stern_fd_02
+        jump day_01_stern_kd_02
 
-label day_01_stern_fd_01:
-    fd "Yes, in fact I did! Taking initiative as always, of course, for the good of the ship since darling, dear, big boss Claus is ever so busy designing toys for the factory."
-    fd "Oh, with that much free time I don't know what I'd do!"
-    $ Day_01_FD_Conversation = True
+label day_01_stern_kd_01:
+    kd "Yes, in fact I did! Taking initiative as always, of course, for the good of the ship since darling, dear, big boss Claus is ever so busy designing toys for the factory."
+    kd "Oh, with that much free time I don't know what I'd do!"
+    $ Day_01_kd_Conversation = True
     jump day_01_center
 
-label day_01_stern_fd_02:
-    fd "Oh, you know, just enjoying the sweet, salt air and schem-" 
-    fd "planning, of course, planning and thinking and organizing, et cetra!"
-    fd "You know, if I was in charge I think we could really turn this boat around! In fact, would you be willing to sign and share this petition?"
+label day_01_stern_kd_02:
+    kd "Oh, you know, just enjoying the sweet, salt air and schem-" 
+    kd "planning, of course, planning and thinking and organizing, et cetra!"
+    kd "You know, if I was in charge I think we could really turn this boat around! In fact, would you be willing to sign and share this petition?"
 
 menu:
     "Sign, but decline to share.":
-        jump day_01_stern_fd_03
+        jump day_01_stern_kd_03
     "Yeah, anything's better than this, why not? Sign and share.":
-        jump day_01_stern_fd_04
+        jump day_01_stern_kd_04
     "Decline entirely.":
-        jump day_01_stern_fd_05
+        jump day_01_stern_kd_05
 
-label day_01_stern_fd_03:
+label day_01_stern_kd_03:
     # FILL OUT
-    fd "oh"
-    $ Day_01_FD_Conversation = True
+    kd "oh"
+    $ Day_01_kd_Conversation = True
     jump day_01_center
 
-label day_01_stern_fd_04:
-    fd "I knew I could count on you two! Talk to me next week, about it, yeah? We've got big stuff coming!"
-    $ Day_01_FD_Conversation = True
-    $ Quest_FD = True
+label day_01_stern_kd_04:
+    kd "I knew I could count on you two! Talk to me next week, about it, yeah? We've got big stuff coming!"
+    $ Day_01_kd_Conversation = True
+    $ Quest_KD = True
     jump day_01_center
 
-label day_01_stern_fd_05:
+label day_01_stern_kd_05:
     # FILL OUT
-    fd "oh"
-    $ Day_01_FD_Conversation = True
+    kd "oh"
+    $ Day_01_kd_Conversation = True
     jump day_01_center
 
 
 
 
 label day_01_galley:
-    if Day_01_FD_Conversation == True:
+    if Day_01_kd_Conversation == True:
         mc "yum! let's go"       
     elif Day_01_Kwiyer_Conversation == True:
         mc "yum! let's go"
@@ -307,11 +336,11 @@ label day_01_galley:
     h "...."
     h "Oh, Foyle.. and friend, I assume. What's up?"
 
-    if Quest_FD == True:
+    if Quest_KD == True:
         menu:
             "Talk about the Union.":
                 jump day_01_galley_herc_01
-            # if FD quest ->
+            # if kd quest ->
             "What do you think about management?":
                 jump day_01_galley_herc_02
             "Bring up Jeffany.":
@@ -329,7 +358,8 @@ label day_01_galley_herc_01:
 
     if Quest_KW == True and Quest_NX == True:
         menu:
-            "(neutral) You're right. Disregard.": # LOSE TRUST WITH TIN
+            "(neutral) You're right. Disregard.": 
+                $ trust_points -= 1
             # trust roll check
                 jump day_01_galley_herc_04
             # if union quest ->
@@ -341,7 +371,8 @@ label day_01_galley_herc_01:
                 jump day_01_center
     elif Quest_KW == True and Quest_NX == False: # if only Quest_KW is true
         menu:
-            "(neutral) You're right. Disregard.": # LOSE TRUST WITH TIN
+            "(neutral) You're right. Disregard.":
+                $ trust_points -= 1
             # trust roll check
                 jump day_01_galley_herc_04
             # if union quest ->
@@ -349,7 +380,8 @@ label day_01_galley_herc_01:
                 jump day_01_center
     elif Quest_KW == False and Quest_NX == True:
         menu:
-            "(neutral) You're right. Disregard.": # LOSE TRUST WITH TIN
+            "(neutral) You're right. Disregard.":
+                $ trust_points -= 1
             # trust roll check
                 jump day_01_galley_herc_04
             # if nixon quest ->
@@ -358,7 +390,8 @@ label day_01_galley_herc_01:
                 jump day_01_center
     else: # QuestKW and QuestNX are False
         menu:
-            "(neutral) You're right. Disregard.": # LOSE TRUST WITH TIN
+            "(neutral) You're right. Disregard.": 
+                $ trust_points -= 1
             # trust roll check
                 jump day_01_galley_herc_04
 
@@ -382,7 +415,8 @@ label day_01_galley_herc_04:
     mc "Kwiyer seems like she really cares about getting people's opinions.."
     h "You think so?"
     mc "I have a good feeling about her. Even just as someone to talk to, it seems like she's really trying."
-    h "Huh.. Ok, sure." # +1 to union cause
+    h "Huh.. Ok, sure."
+    $ union_ending_points += 1
     jump day_01_center
 
 
