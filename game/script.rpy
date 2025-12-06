@@ -1,5 +1,5 @@
 
-define mc = Character('Tin', color="#c8ffc8", image="tin")
+define tin = Character('Tin', color="#c8ffc8", image="tin")
 define n = Character('???', color="#c8ffc8")
 define kw = Character('Kwiyer', color="#F1F794", image="kw")
 define nx = Character('Nixon', color="#544B13", image ="nixon")
@@ -24,6 +24,7 @@ label start:
     $ union_ending_points = 0
     $ nixon_ending_points = 0
     $ kd_ending_points = 0
+    $ readyforaudio_puzzle_01 = False
 
     scene screen0
 
@@ -82,7 +83,7 @@ label negative01:
     scene screen1
     with fade
 
-    mc sad "come on, at least let me be a little edgy if we’re at the end of the world."
+    tin @ sad "come on, at least let me be a little edgy if we’re at the end of the world."
     jump intro_02
 
 
@@ -92,15 +93,15 @@ label positive01:
     scene screen1
     with fade
 
-    mc neutral "you think so? that’s… kind of you, thanks"
+    tin neutral "you think so? that’s… kind of you, thanks"
     jump intro_02
 
 label intro_02:
 
-    mc neutral "i hear it’s starting to get pretty close to the draw."
-    mc "union wants to nix santa and nixon wants to spy on the union."
-    mc "this is starting to get a bit too much, we still haven’t even found out what happened to jeffany."
-    mc "we completely run out of power in 14 days. after that, we’re at the mercy of the world. what do you think?"
+    tin neutral "i hear it’s starting to get pretty close to the draw."
+    tin "union wants to nix santa and nixon wants to spy on the union."
+    tin "this is starting to get a bit too much, we still haven’t even found out what happened to jeffany."
+    tin "we completely run out of power in 14 days. after that, we’re at the mercy of the world. what do you think?"
 
 menu:
     "we should talk to the union.":
@@ -110,50 +111,50 @@ menu:
 
 label positive02:
     $ trust_points += 1
-    mc neutral "you’re right, maybe it’s time we got more involved. anything they’ve got has to be better than this, right?"
+    tin neutral "you’re right, maybe it’s time we got more involved. anything they’ve got has to be better than this, right?"
     jump intro_03
 
 label negative02:
     $ trust_points -= 1
-    mc surprised "oh- wow, i.. really? you’d take nixon’s deal?"
-    mc "maybe let's change the subject."
+    tin surprised "oh- wow, i.. really? you’d take nixon’s deal?"
+    tin "maybe let's change the subject."
     jump intro_03
 
 label intro_03:
 
     if trust_points >= 5:
 
-        mc neutral "you’re the only person i can lean on."
-        mc "no matter what happens, you’re my partner for whatever that means these days."
-        mc "5999 people left on earth, and you’re the only person i can trust."
+        tin neutral "you’re the only person i can lean on."
+        tin "no matter what happens, you’re my partner for whatever that means these days."
+        tin "5999 people left on earth, and you’re the only person i can trust."
         jump intro_04
 
     if trust_points <= 4:
 
-        mc angry "you’re the only person i can lean on."
-        mc "no matter what happens, you’re my partner for whatever that means these days."
-        mc "..."
-        mc "5999 people left on earth, and you’re the only person i can trust."
+        tin angry "you’re the only person i can lean on."
+        tin "no matter what happens, you’re my partner for whatever that means these days."
+        tin "..."
+        tin "5999 people left on earth, and you’re the only person i can trust."
         jump intro_04
         
 label intro_04:
-    mc neutral "our shift is starting soon,"
+    tin neutral "our shift is starting soon,"
 
 ## SHIFT START: GALLEY 
 
 label shift_start_galley:
-    mc neutral "mic check, one two, one two, you read me?"
+    tin neutral "mic check, one two, one two, you read me?"
 
 menu:
     "yes.":
         jump shift_start_galley_02
 
 label shift_start_galley_02:
-    mc "perfect. what's in store for us?"
-    mc "the only thing we really have to do is handle the shipment from the Entire Nation of Switzerland and I'd like to talk to at least 2 people about jeffany's disappearance."
+    tin "perfect. what's in store for us?"
+    tin "the only thing we really have to do is handle the shipment from the Entire Nation of Switzerland and I'd like to talk to at least 2 people about jeffany's disappearance."
     # tutorial dialogue
-    mc "{i}When you want to send me somewhere else, cycle through your cameras and press 'enter' to direct me. {/i}"
-    mc "{i} click on items or people if you want me to investigate, i'll be listening for your input.{/i}"
+    tin "{i}When you want to send me somewhere else, cycle through your cameras and press 'enter' to direct me. {/i}"
+    tin "{i} click on items or people if you want me to investigate, i'll be listening for your input.{/i}"
 
 menu:
     "bridge":
@@ -171,19 +172,22 @@ menu:
 
 
 label day_01_bridge:
-    mc "that's off limits right now. let's try somewhere else?"
+    tin "that's off limits right now. let's try somewhere else?"
     jump day_01_center
 
 
 label day_01_engineroom:
-    mc "i don't have the keys, maybe some other time."
-    jump day_01_center
+    if readyforaudio_puzzle_01:
+        jump day_01_audio_puzzle
+    else: 
+        tin "i don't have the keys, maybe some other time."
+        jump day_01_center
 
 
 label day_01_factorycam01:
     $ Day_01_Kwiyer_Conversation = False
-    mc sad "if we must.."
-    mc angry "the factory smells unpleasant as always. i'm not sure how much longer i can stand to inhale plastic fumes like this."
+    tin sad "if we must.."
+    tin angry "the factory smells unpleasant as always. i'm not sure how much longer i can stand to inhale plastic fumes like this."
     kw smile "Hiya, Tin! Merry day, I think. What are you up to?"
 
 menu:
@@ -225,7 +229,7 @@ label negative_factorycam01:
 
 label day_01_deckthree:
     $ Day_01_Nixon_Conversation = False
-    mc angry "I forgot how loud the lights are here."
+    tin angry "I forgot how loud the lights are here."
     nx "Oh, Tin, perfect! Just who I wanted to see. Have you given any thought to the offer?"
 
 menu:
@@ -266,8 +270,8 @@ label day_01_deckthree_nixon_04:
 
 label day_01_stern:
     $ Day_01_kd_Conversation = False
-    mc "it's as good a day as any, i guess. at least the ocean breeze is nice, we still have that."
-    mc "it looks like KD Pantz is here if we want to talk to him"
+    tin "it's as good a day as any, i guess. at least the ocean breeze is nice, we still have that."
+    tin "it looks like KD Pantz is here if we want to talk to him"
     kd "Tin Foyle you wonderful elf, you! How are you and your partner-in-security doing?"
     kd "Do you see the beautiful nation of Switzerland still hard at work while everything's gone under? How admirable!"
     kd "Not very chatty if you ask me, but I'm here to take care of obligations!"
@@ -322,17 +326,17 @@ label day_01_stern_kd_05:
 
 label day_01_galley:
     if Day_01_kd_Conversation == True:
-        mc "yum! let's go"       
+        tin "yum! let's go"       
     elif Day_01_Kwiyer_Conversation == True:
-        mc "yum! let's go"
+        tin "yum! let's go"
     elif Day_01_Nixon_Conversation == True:
-        mc "yum! let's go"
+        tin "yum! let's go"
     else:
     # if no
-        mc "i wanna check in with a leader first."
+        tin "i wanna check in with a leader first."
 
-    mc "Oh! Herscheles is here. They were pretty close to Jeffany.. I don't think we should bring it up.."
-    mc "But... I'll trust you to make the right choice."
+    tin surprised "Oh! Herscheles is here. They were pretty close to Jeffany.. I don't think we should bring it up.."
+    tin neutral "But... I'll trust you to make the right choice."
     h "...."
     h "Oh, Foyle.. and friend, I assume. What's up?"
 
@@ -359,12 +363,10 @@ label day_01_galley_herc_01:
     if Quest_KW == True and Quest_NX == True:
         menu:
             "(neutral) You're right. Disregard.": 
-                $ trust_points -= 1
-            # trust roll check
                 jump day_01_galley_herc_04
             # if union quest ->
-            "There's a meeting tonight and they want people's input.": #(no change to trust)
-                jump day_01_center
+            "There's a meeting tonight and they want people's input.":
+                jump day_01_galley_herc_05
             # if nixon quest ->
             "You're right, you might want to talk to Nixon.":
             # trust roll check
@@ -372,54 +374,124 @@ label day_01_galley_herc_01:
     elif Quest_KW == True and Quest_NX == False: # if only Quest_KW is true
         menu:
             "(neutral) You're right. Disregard.":
-                $ trust_points -= 1
-            # trust roll check
                 jump day_01_galley_herc_04
             # if union quest ->
-            "There's a meeting tonight and they want people's input.": #(no change to trust)
-                jump day_01_center
+            "There's a meeting tonight and they want people's input.": 
+                jump day_01_galley_herc_05
     elif Quest_KW == False and Quest_NX == True:
         menu:
             "(neutral) You're right. Disregard.":
-                $ trust_points -= 1
-            # trust roll check
                 jump day_01_galley_herc_04
             # if nixon quest ->
             "You're right, you might want to talk to Nixon.":
             # trust roll check
-                jump day_01_center
+                jump day_01_galley_herc_06
     else: # QuestKW and QuestNX are False
         menu:
             "(neutral) You're right. Disregard.": 
-                $ trust_points -= 1
-            # trust roll check
                 jump day_01_galley_herc_04
 
 
 
 
 label day_01_galley_herc_02:
-    h "They're not my favorite in the world."
-    # FILL OUT CONTINUE
+    h "Management's not my favorite in the world. I keep hearing that Pantz guy muttering about how he should be in charge."
+
+    menu:
+        "Wanna sign a petition?":
+            jump day_01_galley_herc_02a
+        "Don't bring it up.":
+            jump day_01_galley_herc_02b
     jump day_01_center
 
+label day_01_galley_herc_02a:
+    h "A petition? What do we need that for?"
+    tin "It looks like KD Pantz is looking for support. I think we've about all had enough, right?"
+    h "But what would it.. Like.. Do?"
+    tin smile "That's a good question! Umm, I think it's just for his confidence, maybe?"
+    h "What the hell, why not.." #[+1 to KD's cause]
+    $ kd_ending_points +=1
+    jump day_01_center
+
+label day_01_galley_herc_02b:
+    $ trust_roll = renpy.random.randint(1, 20)
+    if trust_roll > 10:
+        tin sad "Hm, yeah… Surely anything's better than this.."
+        $ trust_points -=1
+        jump day_01_center
+    else:
+        tin angry "Well, actually, there's a petition you could sign."
+        $ trust_points -=1
+        jump day_01_galley_herc_02a
+
 label day_01_galley_herc_03:
-    # TRUST ROLL CHECK
+    $ trust_roll = renpy.random.randint(1, 20)
+    if trust_roll > 10:
+        tin surprised "Um...[[quietly]] are you sure…? Ok…"
+        tin neutral "[[clears throat]] We need to ask a few things about.. Jeffany.."
+        h """...
+        Somebody killed her
+        I know it.. I just…
+        I keep going over everything. What do you need to know?
+        """
+    else:
+        tin angry "[[quietly]] No, I already said we're not doing that."
+        h "What?"
+        tin "No, it's nothing, it's just-"
+        h "You want to avoid talking about Jeffany?"
+        tin surprised " "
+        h "You can ask. It's tough. But you can ask."
+
+    tin "Well, we can't rewind the tapes… The engine rooms been scrambled, and that's one of the places we haven't been able to look. Got any ideas?"
+    h "...."
+    h "You listen to the radio a lot?"
+    tin "What?"
+    h "The radio."
+    tin "Sure, at the end of our shift we usually hang back and..."
+    h "When you two listen to the radio tonight… Dial into 103.5."
+    tin "Oh.. Um.. Sure."
+
+    pause 2.0
+    tin "Alright, that's everything for today… Let's unwind with that radio, huh?"
+    $ readyforaudio_puzzle_01 = True
     jump day_01_center
 
 label day_01_galley_herc_04:
-    # if trust roll success
-    h "Uhuh... Anything else?"
-    # if trust roll fail
-    mc "Well, actually..!"
-    mc "Kwiyer seems like she really cares about getting people's opinions.."
-    h "You think so?"
-    mc "I have a good feeling about her. Even just as someone to talk to, it seems like she's really trying."
-    h "Huh.. Ok, sure."
-    $ union_ending_points += 1
+    $ trust_points -= 1
+    $ trust_roll = renpy.random.randint(1, 20)
+    if trust_roll > 10:
+        # if trust roll success
+        h "Uhuh... Anything else?"
+    else:
+        # if trust roll fail
+        tin "Well, actually..!"
+        tin "Kwiyer seems like she really cares about getting people's opinions.."
+        h "You think so?"
+        tin "I have a good feeling about her. Even just as someone to talk to, it seems like she's really trying."
+        h "Huh.. Ok, sure."
+        $ union_ending_points += 1
     jump day_01_center
 
+label day_01_galley_herc_05:
+    #(no change to trust)
+    h "Oh, yeah? Ok.. Sure, I might pop by, but I'm not committing to anything."
+    jump day_01_center
 
+label day_01_galley_herc_06:
+    $ trust_roll = renpy.random.randint(1, 20)
+    if trust_roll > 10:
+        h "Really? What does he have to offer?"
+        tin "Security, I think. I don't know what will happen, but it's better to be safe than sorry, right?"
+        h "Yeah, I guess so… I'll talk to him later, thanks."
+        $ nixon_ending_points +=1
+    else:
+        if Quest_KD == True:
+            jump day_01_galley_herc_02 #starts KD quest dialogue
+        else:
+            tin "..."
+            tin "I'd be careful around Nixon, just so you know. He's been prying in the wrong places lately.."
+            h " Good to know."
+    jump day_01_center    
 
 
 
@@ -495,6 +567,10 @@ label day_01_center:
             action Jump("click_on_radio")
 
 
+label day_01_audio_puzzle:
+    "test success"
+    jump day_01_center
+
 
 
 
@@ -539,7 +615,6 @@ label click_on_radio:
     scene shipscreen_radio
     "Choose the tunes"
     call screen radio_choose
-    return
 
     
 
@@ -559,7 +634,7 @@ screen radio_choose:
             ypadding 20
             xalign 0.5
             yalign 0.5
-            text "103.5"
+            textbutton "103.5" action Jump("radio_1035")
         frame:
             xpadding 40
             ypadding 20
@@ -583,6 +658,13 @@ screen radio_choose:
 label radio_1019:
     play music "audio/background.mp3" fadeout 2.0 fadein 2.0
     "playing 101.9 - your favorite elf's favorite radio station"
+    jump call_hide_screens_ui
+
+label radio_1035:
+    play music "audio/radio_metal.ogg" fadeout 2.0 fadein 2.0
+    pause 3.0
+    "hah! I feel like I've seen a poster for this song on the walls somewhere weird..." #directing player to engine room
+    pause 1.0
     jump call_hide_screens_ui
 
 label turn_off_radio:
