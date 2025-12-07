@@ -3,8 +3,24 @@ define tin = Character('Tin', color="#c8ffc8", image="tin")
 define n = Character('???', color="#c8ffc8")
 define kw = Character('Kwiyer', color="#F1F794", image="kw")
 define nx = Character('Nixon', color="#544B13", image ="nixon")
-define kd = Character('KD Pantz', color="#EB8FE6")
-define h = Character('Herscheles', color="#6E90FF")
+define kd = Character('KD Pantz', color="#EB8FE6", image ="kdpantz")
+define h = Character('Herscheles', color="#6E90FF", image ="h")
+
+image factory_01 = "FACTORY_1.png"
+image factory_02 = "FACTORY_2.png"
+#image factory_02_kw = "FACTORY_2_KWIYER.png"
+image galley_01 = "GALLEY_1.png"
+image galley_02 = "GALLEY_2.png"
+#image galley_02_h = "GALLEY_2_HERSH.png"
+image hall_center = "HALL_CENTER.png"
+image hall_left = "HALL_LEFT.png"
+#image hall_left_nx = "HALL_LEFT_NIXON.png"
+image hall_right = "HALL_RIGHT.png"
+image stern_center = "STERN_CENTER.png"
+image stern_right = "STERN_RIGHT.png"
+#image stern_right_kd = "STERN_RIGHT_KD.png"
+
+
 
 image screen0 = "introscreen_ph.png"
 image screen1 = "boat_placeholder.png"
@@ -30,9 +46,8 @@ label start:
     $ Day_01_kd_Conversation = False
     $ Day_01_h_Conversation = False
 
-    scene screen0
+    scene stern_center
 
-    #call screen frame_text()
     show screen frame_text
 
     screen frame_text:
@@ -55,12 +70,6 @@ label start:
     pause 5
     hide screen frame_text
 
-    #n "our home, the north pole, has melted all away over the course of a short, rapid hundred years."
-    #n "our boss, santa, has held onto a dream of dry land for the whole of humanity."
-    #n "we are elves, on his grand sleigh on the seas, the Last Hope."
-    #n "the lights flicker, as it has been doing for the past few months. our fuel supplies are low, see."
-    #n "as sea levels continue to rise, it’s harder to find fuel- and freshwater."
-    #n "we’re a crew, now 39. One of our coworkers has been missing for some time… it’s our duty to find out what happened."
     n """
     our home, the north pole, has melted all away over the course of a short, rapid hundred years.
 
@@ -84,18 +93,13 @@ menu:
 
 label negative01:
     $ trust_points -= 1
-    scene screen1
-    with fade
 
-    tin neutral "come on, at least let me be a little edgy if we’re at the end of the world."
+    tin angry "come on, at least let me be a little edgy if we’re at the end of the world."
     jump intro_02
 
 
 label positive01:
     $ trust_points += 1
-
-    scene screen1
-    with fade
 
     tin neutral "you think so? that’s… kind of you, thanks"
     jump intro_02
@@ -176,21 +180,39 @@ menu:
 
 
 label day_01_bridge:
-    tin "that's off limits right now. let's try somewhere else?"
+    scene hall_right
+    tin neutral "that's off limits right now. let's try somewhere else?"
     jump day_01_center
 
 
 label day_01_engineroom:
+    scene factory_01
     if readyforaudio_puzzle_01:
         jump day_01_audio_puzzle
     else: 
-        tin "i don't have the keys, maybe some other time."
+        tin neutral "i don't have the keys, maybe some other time."
         jump day_01_center
 
 
 label day_01_factorycam01:
+    scene factory_02
+    call screen hall_kw
+
+    screen hall_kw():
+ 
+        imagebutton:
+            focus_mask True
+            xalign 0.5
+            yalign 0.5
+            idle "FACTORY_2_KWIYER.png"
+            hovered SetVariable("screen_tooltip", "That's Kwiyer, head of the union.")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_factorycam02")
+
+
+label day_01_factorycam02:
     if Day_01_Kwiyer_Conversation == True:
-        tin "I don't think I have anything else to say here."
+        tin neutral "I don't think I have anything else to say here."
         jump day_01_center
     else:
         tin angry "if we must.."
@@ -237,10 +259,24 @@ label negative_factorycam01:
     jump day_01_center
 
 
-
 label day_01_deckthree:
+    scene hall_left
+    call screen hall_nixon
+
+    screen hall_nixon():
+ 
+        imagebutton:
+            focus_mask True
+            xalign 0.5
+            yalign 0.5
+            idle "HALL_LEFT_NIXON.png"
+            hovered SetVariable("screen_tooltip", "That's Nixon.")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_deckthree_01")
+
+label day_01_deckthree_01:
     if Day_01_Nixon_Conversation == True:
-        tin "I don't think I wish talk to this elf again."
+        tin neutral "I don't think I wish talk to this elf again."
         jump day_01_center
     else:
         tin angry "I forgot how loud the lights are here."
@@ -286,13 +322,28 @@ label day_01_deckthree_nixon_04:
 
 
 label day_01_stern:
+    scene stern_right
+    call screen stern_kd
+
+    screen stern_kd():
+        imagebutton:
+            focus_mask True
+            xalign 0.5
+            yalign 0.5
+            idle "STERN_RIGHT_KD.png"
+            hovered SetVariable("screen_tooltip", "That's KD Pantz. He's always scheming something...")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_stern_01")
+
+
+label day_01_stern_01:
     if Day_01_kd_Conversation == True:
-        tin "As nice as it is up here, we should really be thorough."
+        tin neutral "As nice as it is up here, we should really be thorough."
         jump day_01_center
     else:
         tin @ smile "it's as good a day as any, i guess. at least the ocean breeze is nice, we still have that."
         tin "it looks like KD Pantz is here if we want to talk to him"
-        show kd at right
+        show kdpantz at right
         kd "Tin Foyle you wonderful elf, you! How are you and your partner-in-security doing?"
         kd "Do you see the beautiful nation of Switzerland still hard at work while everything's gone under? How admirable!"
         kd "Not very chatty if you ask me, but I'm here to take care of obligations!"
@@ -350,12 +401,26 @@ label day_01_stern_kd_05:
 
 
 label day_01_galley:
+    scene galley_02
+    call screen galley_h
+
+    screen galley_h():
+        imagebutton:
+            focus_mask True
+            xalign 0.5
+            yalign 0.5
+            idle "GALLEY_2_HERSH.png"
+            hovered SetVariable("screen_tooltip", "That's Herscheles - Hersh for short. He's the cook.")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_galley_01")
+
+label day_01_galley_01:
     if readyforaudio_puzzle_01 == True:
         tin "I have somewhere else to be."
         jump day_01_center
 
     if Day_01_h_Conversation == True:
-        tin @ surprised "Err - wait, you want me to as Hersch about Jeffany...?"
+        tin @ surprised "Err - wait, you want me to ask Hersch about Jeffany...?"
         jump day_01_galley_herc_03
 
     if Day_01_kd_Conversation == True:
@@ -371,7 +436,7 @@ label day_01_galley:
 
     tin @ surprised "Oh! Herscheles is here. They were pretty close to Jeffany.. I don't think we should bring it up.."
     tin neutral "But... I'll trust you to make the right choice."
-    show h at right
+    show h neutral at right
     h "...."
     h "Oh, Foyle.. and friend, I assume. What's up?"
 
@@ -393,7 +458,7 @@ label day_01_galley:
 
 
 label day_01_galley_herc_01:
-    h "Ah, yeah, them… I dunno, what's the point in having a union anymore when we live in an apocalypse?"
+    h @ sad "Ah, yeah, them… I dunno, what's the point in having a union anymore when we live in an apocalypse?"
 
     if Quest_KW == True and Quest_NX == True:
         menu:
@@ -468,26 +533,28 @@ label day_01_galley_herc_03:
     if trust_roll > 10:
         tin @ surprised "Um...[[quietly]] are you sure…? Ok…"
         tin neutral "[[clears throat]] We need to ask a few things about.. Jeffany.."
-        h """...
+        show h sad at right
+        h sad """...
         Somebody killed her
         I know it.. I just…
         I keep going over everything. What do you need to know?
         """
     else:
         tin @ angry "[[quietly]] No, I already said we're not doing that."
-        h "What?"
+        show h neutral at right
+        h neutral "What?"
         tin "No, it's nothing, it's just-"
         h "You want to avoid talking about Jeffany?"
         tin @ surprised " "
-        h "You can ask. It's tough. But you can ask."
+        h @ sad "You can ask. It's tough. But you can ask."
 
     tin "Well, we can't rewind the tapes… The engine rooms been scrambled, and that's one of the places we haven't been able to look. Got any ideas?"
-    h "...."
+    h sad "...."
     h "You listen to the radio a lot?"
     tin "What?"
     h "The radio."
     tin "Sure, at the end of our shift we usually hang back and..."
-    h "When you two listen to the radio tonight… Dial into 103.5."
+    h neutral "When you two listen to the radio tonight… Dial into 103.5."
     tin @ surprised "Oh.. Um.. Sure."
     hide h
 
@@ -544,12 +611,12 @@ label day_01_galley_herc_06:
 
 label day_01_center:
 
+    #scene ship_screen_center with dissolve
+    scene hall_center with dissolve
     call screen shipscreen_nav_center
 
-    scene ship_screen_center with dissolve
-
     screen shipscreen_nav_center():
-        add "shipscreen_center"
+        #add "HALL_CENTER"
         modal True
 
         imagebutton auto "ship_map_bridge_%s":
@@ -601,11 +668,11 @@ label day_01_center:
         #     action Jump("day_01_right")
 
 
-        imagebutton auto "ciara_cd_%s":
-            focus_mask True
-            hovered SetVariable("screen_tooltip", "Iconic CD")
-            unhovered SetVariable("screen_tooltip", "")
-            action Jump("click_on_cd")
+        # imagebutton auto "ciara_cd_%s":
+        #     focus_mask True
+        #     hovered SetVariable("screen_tooltip", "Iconic CD")
+        #     unhovered SetVariable("screen_tooltip", "")
+        #     action Jump("click_on_cd")
 
         imagebutton auto "radio_%s":
             focus_mask True
