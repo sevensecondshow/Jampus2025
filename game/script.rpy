@@ -56,16 +56,7 @@ label start:
             ypadding 20
             xalign 0.5
             yalign 0.5
-            # add Solid ("#520303")
-            # xsize 600
-            # ysize 200
-            # xoffset 690
-            # yoffset 440
             text "DAYS UNTIL DECISION: 14"
-            # hbox:
-            #     textbutton "DAYS UNTIL DECISION: 14" action Jump(intro01)
-            #     ypos 0.5
-            #     xpos 0.15
 
     pause 5
     hide screen frame_text
@@ -93,15 +84,15 @@ menu:
 
 label negative01:
     $ trust_points -= 1
-
-    tin angry "come on, at least let me be a little edgy if we’re at the end of the world."
+    show tin angry at left
+    tin "come on, at least let me be a little edgy if we’re at the end of the world."
     jump intro_02
 
 
 label positive01:
     $ trust_points += 1
-
-    tin neutral "you think so? that’s… kind of you, thanks"
+    show tin neutral at left
+    tin "you think so? that’s… kind of you, thanks"
     jump intro_02
 
 label intro_02:
@@ -151,6 +142,8 @@ label intro_04:
 ## SHIFT START: GALLEY 
 
 label shift_start_galley:
+    scene galley_01 with dissolve
+    show tin neutral at left
     tin neutral "mic check, one two, one two, you read me?"
 
 menu:
@@ -158,11 +151,11 @@ menu:
         jump shift_start_galley_02
 
 label shift_start_galley_02:
-    tin neutral "perfect. what's in store for us?"
-    tin "the only thing we really have to do is handle the shipment from the Entire Nation of Switzerland and I'd like to talk to at least 2 people about jeffany's disappearance."
+    tin smile "perfect. what's in store for us?"
+    tin neutral "the only thing we really have to do is handle the shipment from the Entire Nation of Switzerland and I'd like to talk to at least 2 people about jeffany's disappearance."
     # tutorial dialogue
     tin "{i}When you want to send me somewhere else, cycle through your cameras and press 'enter' to direct me. {/i}"
-    tin "{i} click on items or people if you want me to investigate, i'll be listening for your input.{/i}"
+    tin "{i}click on items or people if you want me to investigate, i'll be listening for your input.{/i}"
 
 menu:
     "bridge":
@@ -181,12 +174,14 @@ menu:
 
 label day_01_bridge:
     scene hall_right
+    show tin neutral at left
     tin neutral "that's off limits right now. let's try somewhere else?"
     jump day_01_center
 
 
 label day_01_engineroom:
     scene factory_01
+    show tin neutral at left
     if readyforaudio_puzzle_01:
         jump day_01_audio_puzzle
     else: 
@@ -211,11 +206,14 @@ label day_01_factorycam01:
 
 
 label day_01_factorycam02:
+
     if Day_01_Kwiyer_Conversation == True:
-        tin neutral "I don't think I have anything else to say here."
+        show tin neutral at left
+        tin "I don't think I have anything else to say here."
         jump day_01_center
     else:
-        tin angry "if we must.."
+        show tin angry at left
+        tin "if we must.."
         tin "the factory smells unpleasant as always. i'm not sure how much longer i can stand to inhale plastic fumes like this."
         show kw smile at right
         kw "Hiya, Tin! Merry day, I think. What are you up to?"
@@ -276,10 +274,12 @@ label day_01_deckthree:
 
 label day_01_deckthree_01:
     if Day_01_Nixon_Conversation == True:
-        tin neutral "I don't think I wish talk to this elf again."
+        show tin neutral at left
+        tin  "I don't think I wish talk to this elf again."
         jump day_01_center
     else:
-        tin angry "I forgot how loud the lights are here."
+        show tin angry at left
+        tin "I forgot how loud the lights are here."
         show nixon at right
         nx "Oh, Tin, perfect! Just who I wanted to see. Have you given any thought to the offer?"
 
@@ -338,11 +338,13 @@ label day_01_stern:
 
 label day_01_stern_01:
     if Day_01_kd_Conversation == True:
-        tin neutral "As nice as it is up here, we should really be thorough."
+        show tin neutral at left
+        tin "As nice as it is up here, we should really be thorough."
         jump day_01_center
     else:
-        tin @ smile "it's as good a day as any, i guess. at least the ocean breeze is nice, we still have that."
-        tin "it looks like KD Pantz is here if we want to talk to him"
+        show tin smile at left
+        tin "it's as good a day as any, i guess. at least the ocean breeze is nice, we still have that."
+        tin neutral "it looks like KD Pantz is here if we want to talk to him"
         show kdpantz at right
         kd "Tin Foyle you wonderful elf, you! How are you and your partner-in-security doing?"
         kd "Do you see the beautiful nation of Switzerland still hard at work while everything's gone under? How admirable!"
@@ -415,8 +417,9 @@ label day_01_galley:
             action Jump("day_01_galley_01")
 
 label day_01_galley_01:
+    show tin neutral at left
     if readyforaudio_puzzle_01 == True:
-        tin "I have somewhere else to be."
+        tin @ angry "I have somewhere else to be."
         jump day_01_center
 
     if Day_01_h_Conversation == True:
@@ -683,6 +686,13 @@ label day_01_center:
 
 label day_01_audio_puzzle:
     "test success"
+    #show clickables - 3 posters, 1 door
+    # say - look at the radio ad, which one am i listening to now?
+    # click on each poster, bring up close-up, text "looks like a poster for chiptune..."
+    # click on door
+    # input 4 numbers
+    # open the door -> new area
+    # narrator describing 'to be continued...'
     jump day_01_center
 
 
