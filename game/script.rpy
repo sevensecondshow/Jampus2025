@@ -686,7 +686,47 @@ label day_01_center:
 
 label day_01_audio_puzzle:
     "test success"
+    scene hall_right
+    call screen engine_room
+
+    screen engine_room():
+        add "engineroom_poster"
+        imagebutton:
+            focus_mask True
+            xalign 0.5
+            yalign 0.5
+            idle "engine_chiptune_poster.png"
+            hovered SetVariable("screen_tooltip", "A poster for a song that seems familiar.")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_audio_puzzle_01")
+    
+        imagebutton:
+            focus_mask True
+            xalign 0.5
+            yalign 0.5
+            idle "engine_jazz_poster.png"
+            hovered SetVariable("screen_tooltip", "A poster for a song that seems familiar.")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_audio_puzzle_02")
+
+        imagebutton:
+            focus_mask True
+            xalign 0.5
+            yalign 0.5
+            idle "engine_metal_poster.png"
+            hovered SetVariable("screen_tooltip", "A poster for a song that seems familiar.")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_audio_puzzle_03")
     #show clickables - 3 posters, 1 door
+
+        imagebutton:
+            focus_mask True
+            xalign 0.5
+            yalign 0.5
+            idle "engine_code_door.png"
+            hovered SetVariable("screen_tooltip", "A door with a code entry for four numbers.")
+            unhovered SetVariable("screen_tooltip", "")
+            action Jump("day_01_audio_puzzle_04")
     # say - look at the radio ad, which one am i listening to now?
     # click on each poster, bring up close-up, text "looks like a poster for chiptune..."
     # click on door
@@ -695,6 +735,43 @@ label day_01_audio_puzzle:
     # narrator describing 'to be continued...'
     jump day_01_center
 
+label day_01_audio_puzzle_01:
+    # poster 01 chiptune
+    scene screen_engine_chiptune_poster
+    pause 2.0
+    "Looks like a poster for that chiptune radio song."
+    jump day_01_audio_puzzle
+
+label day_01_audio_puzzle_02:
+    # poster 02 jazz
+    scene screen_engine_jazz_poster
+    pause 2.0
+    "Looks like a poster for that jazz radio song."
+    jump day_01_audio_puzzle
+
+label day_01_audio_puzzle_03:
+    # poster 03 metal
+    scene screen_engine_metal_poster
+    pause 2.0
+    "Looks like a poster for that metal radio song."
+    jump day_01_audio_puzzle
+
+label day_01_audio_puzzle_04:
+    # pop up number entry box
+    scene screen_engine_code_door
+    pause 2.0
+    "It's asking for a 4-digit number..."
+    # fail entry results screen & try again
+    # success entry results
+    # exit screen option
+
+label day_01_audio_puzzle_04_fail:
+    "Maybe I can try again."
+    jump day_01_audio_puzzle_04
+
+label day_01_audio_puzzle_04_success:
+    # door opens
+    # long monologue + santa music play
 
 
 
@@ -764,7 +841,7 @@ screen radio_choose:
             ypadding 20
             xalign 0.5
             yalign 0.5
-            text "104.9"
+            textbutton "104.9" action Jump("radio_1049")
         frame:
             xpadding 40
             ypadding 20
@@ -780,8 +857,8 @@ screen radio_choose:
             
 
 label radio_1019:
-    play music "audio/background.mp3" fadeout 2.0 fadein 2.0
-    "playing 101.9 - your favorite elf's favorite radio station"
+    play music "audio/radio_chiptune.ogg" fadeout 2.0 fadein 2.0
+    "playing 101.9 - your favorite elf streamer's favorite radio station."
     jump call_hide_screens_ui
 
 label radio_1035:
@@ -791,9 +868,14 @@ label radio_1035:
     pause 1.0
     jump call_hide_screens_ui
 
+label radio_1049:
+    play music "audio/radio_jazz.ogg" fadeout 2.0 fadein 2.0
+    "playing 104.9 - only the classics for the elves who remember the good old reindeer days."
+    jump call_hide_screens_ui  
+
 label turn_off_radio:
     stop music fadeout 2.0
-    "i'm too stressed for music"
+    "Music seems a little inappropriate at the moment."
     jump call_hide_screens_ui
     
 
