@@ -36,7 +36,7 @@ default Quest_NX = False
 default Quest_KW = False
 
 label start:
-    $ trust_points = 50
+    $ trust_points = 5
     $ union_ending_points = 0
     $ nixon_ending_points = 0
     $ kd_ending_points = 0
@@ -58,7 +58,7 @@ label start:
             yalign 0.5
             text "DAYS UNTIL DECISION: 14"
 
-    pause 5
+    pause 5.0
     hide screen frame_text
 
     n """
@@ -116,7 +116,7 @@ label positive02:
 label negative02:
     $ trust_points -= 1
     tin @ surprised "oh- wow, i.. really? you’d take nixon’s deal?"
-    tin "maybe let's change the subject."
+    tin @ angry "maybe let's change the subject."
     jump intro_03
 
 label intro_03:
@@ -127,13 +127,12 @@ label intro_03:
         tin "no matter what happens, you’re my partner for whatever that means these days."
         tin "5999 people left on earth, and you’re the only person i can trust."
         jump intro_04
-
-    if trust_points <= 4:
+    else:
 
         tin angry "you’re the only person i can lean on."
         tin "no matter what happens, you’re my partner for whatever that means these days."
         tin "..."
-        tin sad "5999 people left on earth, and you’re the only person i can trust."
+        tin "5999 people left on earth, and you’re the only person i can trust."
         jump intro_04
         
 label intro_04:
@@ -180,7 +179,7 @@ label day_01_bridge:
 
 
 label day_01_engineroom:
-    scene factory_01
+    scene hall_right
     show tin neutral at left
     if readyforaudio_puzzle_01:
         jump day_01_audio_puzzle
@@ -557,7 +556,7 @@ label day_01_galley_herc_03:
     tin "What?"
     h "The radio."
     tin "Sure, at the end of our shift we usually hang back and..."
-    h neutral "When you two listen to the radio tonight… Dial into 103.5."
+    h neutral "When you two listen to the radio tonight... I think heavy metal feels like the mood."
     tin @ surprised "Oh.. Um.. Sure."
     hide h
 
@@ -685,7 +684,7 @@ label day_01_center:
 
 
 label day_01_audio_puzzle:
-    "test success"
+    
     scene hall_right
     call screen engine_room
 
@@ -737,39 +736,61 @@ label day_01_audio_puzzle:
 
 label day_01_audio_puzzle_01:
     # poster 01 chiptune
-    scene screen_engine_chiptune_poster
+    scene hall_right
+    show screen_engine_chiptune_poster
     pause 2.0
-    "Looks like a poster for that chiptune radio song."
+    "Looks like a poster for that chiptune radio station."
     jump day_01_audio_puzzle
 
 label day_01_audio_puzzle_02:
     # poster 02 jazz
-    scene screen_engine_jazz_poster
+    scene hall_right
+    show screen_engine_jazz_poster
     pause 2.0
-    "Looks like a poster for that jazz radio song."
+    "Looks like a poster for that jazz radio station."
     jump day_01_audio_puzzle
 
 label day_01_audio_puzzle_03:
     # poster 03 metal
-    scene screen_engine_metal_poster
+    scene hall_right
+    show screen_engine_metal_poster
     pause 2.0
-    "Looks like a poster for that metal radio song."
+    "Looks like a poster for that metal radio station."
     jump day_01_audio_puzzle
 
 label day_01_audio_puzzle_04:
     # pop up number entry box
-    scene screen_engine_code_door
+    scene hall_right
+    show screen_engine_code_door
     pause 2.0
-    "It's asking for a 4-digit number..."
-    # fail entry results screen & try again
-    # success entry results
-    # exit screen option
+    # "It's asking for a 4-digit number..."
+    default code_input = "0000"
+    $ code_input = renpy.input("It's asking for a 4-digit number...", default="0000", allow="0123456789", length=4)
+
+    # python:
+    #     code_input = renpy.input("It's asking for a 4-digit number...", default="0000", allow="0123456789", length=4)
+    #     #code_input = code_input.strip()
+
+    #     if not code_input:
+    #         code_input = "0000"
+
+    if code_input == "1035":
+        jump day_01_audio_puzzle_04_success
+    else:
+        jump day_01_audio_puzzle_04_fail
+
 
 label day_01_audio_puzzle_04_fail:
-    "Maybe I can try again."
+    "Ah, that wasn't it. Maybe I can try again."
     jump day_01_audio_puzzle_04
 
 label day_01_audio_puzzle_04_success:
+    "The door opens."
+    show tin surprised at left 
+    tin "They hid a code in the radio station...? Wow. Okay. Let's see what we've been missing..."
+    play music "audio/evilsanta.ogg" fadeout 2.0 fadein 2.0
+    pause 3.0
+    "The mystery continues... Santa sucks"
     # door opens
     # long monologue + santa music play
 
