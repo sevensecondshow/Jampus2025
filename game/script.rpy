@@ -35,6 +35,10 @@ default Quest_KD = False
 default Quest_NX = False
 default Quest_KW = False
 
+define config.default_music_volume = 0.75
+define config.default_sfx_volume = 0.75
+define config.default_voice_volume = 0.75
+
 label start:
     $ trust_points = 5
     $ union_ending_points = 0
@@ -58,6 +62,8 @@ label start:
             yalign 0.5
             text "DAYS UNTIL DECISION: 14"
 
+    play music "audio/tension01.ogg" fadeout 2.0 fadein 2.0 volume 0.35
+    queue music "audio/tension01.ogg"
     pause 5.0
     hide screen frame_text
 
@@ -111,11 +117,31 @@ menu:
 label positive02:
     $ trust_points += 1
     tin neutral "you’re right, maybe it’s time we got more involved. anything they’ve got has to be better than this, right?"
+    show screen frame_text_00
+    screen frame_text_00:
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            text "Tin seems to have appreciated that."
+    pause 2.0
+    hide screen frame_text_00
     jump intro_03
 
 label negative02:
     $ trust_points -= 1
     tin @ surprised "oh- wow, i.. really? you’d take nixon’s deal?"
+    show screen frame_text_01
+    screen frame_text_01:
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            text "The silence is awkward."
+    pause 2.0
+    hide screen frame_text_01
     tin @ angry "maybe let's change the subject."
     jump intro_03
 
@@ -219,10 +245,17 @@ label day_01_factorycam02:
 
 menu:
     "Can you remind us when you last saw Jeffany?":
-        jump day_01_center
+        jump day_01_factorycam01_kwiyer02
         # still needs filling out
     "We might want to get involved with the Union.":
         jump day_01_factorycam01_kwiyer01
+
+label day_01_factorycam01_kwiyer02:
+    kw "Oh, um..."
+    kw @ sad "Actually, I guess I don't remember when I saw them last."
+    kw "I don't think I've seen them today, at the very least, I'm sure of that!"
+    kw "Sorry I can't be more help. But, if I do see them soon, I'll let them know you're looking!"
+    jump day_01_center
 
 label day_01_factorycam01_kwiyer01:
     kw "Oh!!"
@@ -242,8 +275,27 @@ label positive_factorycam01:
     kw smile "Perfect, thank you so much! If you ever see the following people, could you bring it up? "
     hide kw
     $ trust_points += 1
+    show screen frame_text_00
+    screen frame_text_00:
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            text "Tin seems to have appreciated that."
+    pause 2.0
+    hide screen frame_text_00
     # Get Item: Employee List
     # SHOW A LIST OF EMPLOYEES
+    """
+    Kwiyer leaves a list with the following names on it: \n
+    KD Pantz
+
+    Herscheles \n
+    Nixon
+
+    Mull \n
+    """
     $ Day_01_Kwiyer_Conversation = True
     $ Quest_KW = True
     jump day_01_center
@@ -252,6 +304,16 @@ label negative_factorycam01:
     kw sad "Oh! Sure, yeah, no worries. Thanks for the interest! I hope we see you at the meeting.."
     hide kw
     $ trust_points -= 1
+    show screen frame_text_01
+    screen frame_text_01:
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            text "The silence is awkward."
+    pause 2.0
+    hide screen frame_text_01
     $ Day_01_Kwiyer_Conversation = True
     jump day_01_center
 
@@ -307,6 +369,16 @@ label day_01_deckthree_nixon_03:
     nx "Excellent. Sit as close as possible to the staff rep."
     hide nixon
     $ trust_points -= 10
+    show screen frame_text_01
+    screen frame_text_01:
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            text "The silence is awkward."
+    pause 2.0
+    hide screen frame_text_01
     # Get Item: Bug
     $ Day_01_Nixon_Conversation = True
     $ Quest_NX = True
@@ -316,6 +388,16 @@ label day_01_deckthree_nixon_04:
     nx "If you change your mind.. You know how to find me."
     hide nixon
     $ trust_points += 1
+    show screen frame_text_00
+    screen frame_text_00:
+        frame:
+            xpadding 40
+            ypadding 20
+            xalign 0.5
+            yalign 0.5
+            text "Tin seems to have appreciated that."
+    pause 2.0
+    hide screen frame_text_00
     $ Day_01_Nixon_Conversation = True
     jump day_01_center
 
@@ -520,19 +602,52 @@ label day_01_galley_herc_02a:
 label day_01_galley_herc_02b:
     $ trust_roll = renpy.random.randint(1, 20)
     if trust_roll > 10:
+        show screen frame_text_03
+        screen frame_text_03:
+            frame:
+                xpadding 40
+                ypadding 20
+                xalign 0.5
+                yalign 0.5
+                text "Tin seems to trust our opinion here."
+        pause 2.0
+        hide screen frame_text_03
         tin @ angry "Hm, yeah… Surely anything's better than this.."
         hide h
         $ trust_points -=1
         $ Day_01_h_Conversation = True
         jump day_01_center
     else:
+        show screen frame_text_02
+        screen frame_text_02:
+            frame:
+                xpadding 40
+                ypadding 20
+                xalign 0.5
+                yalign 0.5
+                text "Tin doesn't seem to trust us."
+        pause 2.0
+        hide screen frame_text_02
         tin angry "Well, actually, there's a petition you could sign."
         $ trust_points -=1
         jump day_01_galley_herc_02a
 
 label day_01_galley_herc_03:
+    play music "audio/tension02.ogg" noloop fadeout 5.0 fadein 4.0 volume 0.35
+    queue music "audio/tension01.ogg"
+
     $ trust_roll = renpy.random.randint(1, 20)
     if trust_roll > 10:
+        show screen frame_text_03
+        screen frame_text_03:
+            frame:
+                xpadding 40
+                ypadding 20
+                xalign 0.5
+                yalign 0.5
+                text "Tin seems to trust our opinion here."
+        pause 2.0
+        hide screen frame_text_03
         tin @ surprised "Um...[[quietly]] are you sure…? Ok…"
         tin neutral "[[clears throat]] We need to ask a few things about.. Jeffany.."
         show h sad at right
@@ -542,6 +657,16 @@ label day_01_galley_herc_03:
         I keep going over everything. What do you need to know?
         """
     else:
+        show screen frame_text_02
+        screen frame_text_02:
+            frame:
+                xpadding 40
+                ypadding 20
+                xalign 0.5
+                yalign 0.5
+                text "Tin doesn't seem to trust us."
+        pause 2.0
+        hide screen frame_text_02
         tin @ angry "[[quietly]] No, I already said we're not doing that."
         show h neutral at right
         h neutral "What?"
@@ -570,8 +695,28 @@ label day_01_galley_herc_04:
     $ trust_roll = renpy.random.randint(1, 20)
     if trust_roll > 10:
         # if trust roll success
+        show screen frame_text_03
+        screen frame_text_03:
+            frame:
+                xpadding 40
+                ypadding 20
+                xalign 0.5
+                yalign 0.5
+                text "Tin seems to trust our opinion here."
+        pause 2.0
+        hide screen frame_text_03
         h "Uhuh... Anything else?"
     else:
+        show screen frame_text_02
+        screen frame_text_02:
+            frame:
+                xpadding 40
+                ypadding 20
+                xalign 0.5
+                yalign 0.5
+                text "Tin doesn't seem to trust us."
+        pause 2.0
+        hide screen frame_text_02
         # if trust roll fail
         tin @ smile "Well, actually..!"
         tin @ smile "Kwiyer seems like she really cares about getting people's opinions.."
@@ -594,6 +739,16 @@ label day_01_galley_herc_05:
 label day_01_galley_herc_06:
     $ trust_roll = renpy.random.randint(1, 20)
     if trust_roll > 10:
+        show screen frame_text_03
+        screen frame_text_03:
+            frame:
+                xpadding 40
+                ypadding 20
+                xalign 0.5
+                yalign 0.5
+                text "Tin seems to trust our opinion here."
+        pause 2.0
+        hide screen frame_text_03
         h "Really? What does he have to offer?"
         tin "Security, I think. I don't know what will happen, but it's better to be safe than sorry, right?"
         h "Yeah, I guess so… I'll talk to him later, thanks."
@@ -602,6 +757,16 @@ label day_01_galley_herc_06:
         if Quest_KD == True:
             jump day_01_galley_herc_02 #starts KD quest dialogue
         else:
+            show screen frame_text_02
+            screen frame_text_02:
+                frame:
+                    xpadding 40
+                    ypadding 20
+                    xalign 0.5
+                    yalign 0.5
+                    text "Tin doesn't seem to trust us."
+            pause 2.0
+            hide screen frame_text_02
             tin "..."
             tin "I'd be careful around Nixon, just so you know. He's been prying in the wrong places lately.."
             h " Good to know."
@@ -788,9 +953,29 @@ label day_01_audio_puzzle_04_success:
     "The door opens."
     show tin surprised at left 
     tin "They hid a code in the radio station...? Wow. Okay. Let's see what we've been missing..."
-    play music "audio/evilsanta.ogg" fadeout 2.0 fadein 2.0
+    play music "audio/evilsanta.ogg" fadeout 3.0 fadein 3.0
     pause 3.0
-    "The mystery continues... Santa sucks"
+    """
+    There were a lot of things we discovered that day.
+
+    The fate of Jeffany.
+
+    What happens when you piss off evil Santa.
+
+    The exact diet of orcas.
+
+    No matter who we help take control the of the ship -- the North Pole Toymakers Union, the Clause Corp gremlins, or otherwise,
+    We've still gotta make it off this ship alive.
+
+    And the Entire Nation of Switzerland is really not helping.
+
+    The mystery continues. Santa sucks. Elves deserve better.
+
+    (The End)
+    
+    """
+    pause 5.0
+    $ renpy.full_restart()
     # door opens
     # long monologue + santa music play
 
@@ -834,7 +1019,7 @@ label click_on_cd:
     jump day_01_center
 
 label click_on_radio:
-    scene shipscreen_radio
+    show shipscreen_radio
     "Choose the tunes"
     call screen radio_choose
 
@@ -896,6 +1081,8 @@ label radio_1049:
 
 label turn_off_radio:
     stop music fadeout 2.0
+    play music "audio/tension01.ogg" fadeout 2.0 fadein 10.0 volume 0.35
+    queue music "audio/tension01.ogg"
     "Music seems a little inappropriate at the moment."
     jump call_hide_screens_ui
     
